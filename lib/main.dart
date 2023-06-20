@@ -57,6 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class SingleChildScrollViewTestRoute extends StatelessWidget {
+  const SingleChildScrollViewTestRoute({super.key});
+
   @override
   Widget build(BuildContext context) {
     String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
