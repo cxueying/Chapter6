@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Read Text File and Swipe to View'),
+          title: Text('Read Local Text File and Swipe to View'),
         ),
         body: MyHomePage(),
       ),
@@ -32,20 +33,22 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    fetchTextFile();
+    readTextFile();
   }
 
-  Future<void> fetchTextFile() async {
-    final response = await http.get(Uri.parse('https://example.com/path/to/your/textfile.txt'));
+  Future<void> readTextFile() async {
+    // Get the application documents directory
+    final directory = await getApplicationDocumentsDirectory();
+    // Set the local file path
+    final path = '${directory.path}/Book/book1.txt';
+    // Read the text file
+    final file = File(path);
+    final content = await file.readAsString();
 
-    if (response.statusCode == 200) {
-      setState(() {
-        contentList = LineSplitter.split(response.body).toList();
-        _isLoading = false;
-      });
-    } else {
-      throw Exception('Failed to load text file');
-    }
+    setState(() {
+      contentList = LineSplitter.split(content).toList();
+      _isLoading = false;
+    });
   }
 
   @override
@@ -68,3 +71,4 @@ class MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
